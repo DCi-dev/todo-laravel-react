@@ -24,8 +24,8 @@ export default function List({ auth, task }: PageProps<{ task: TodoType }>) {
   const date = new Date(task.deadline).toLocaleDateString();
 
   return (
-    <div>
-      <div key={task.id} className="mt-8 max-w-7xl mx-auto sm:px-6 lg:px-8">
+    <div className="w-full mt-4">
+      <div key={task.id}>
         <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg grid grid-cols-6">
           <p className="p-6 text-gray-900 text-lg font-semibold col-span-3">
             {task.task}

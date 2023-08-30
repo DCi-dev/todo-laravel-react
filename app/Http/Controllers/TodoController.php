@@ -26,7 +26,27 @@ class TodoController extends Controller
     {
         $user = $request->user();
 
-        $todos = Todo::byUser($user)->get();
+
+        $query = Todo::query();
+
+        $filters = json_decode($request->get('filters', '[]'), true);
+
+        foreach ($filters as $filter) {
+            switch ($filter['type']) {
+                case 'search':
+                    $query->where('task', 'like', "%{$filter['data']}%");
+                    break;
+                case 'date_range':
+                    $query->whereBetween('deadline', [$filter['data']['from'], $filter['data']['to']]);
+                    break;
+                case 'status':
+                    $query->where('status', $filter['data']);
+                    break;
+            }
+        }
+
+
+        $todos = $query->where('user_id', $user->id)->get();
 
         // Get the mapping of statuses to their human-friendly format
         $statusMapping = TaskStatus::toSelectArray();

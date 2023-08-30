@@ -27,6 +27,13 @@ class Todo extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function scopeByTaskAndUser($query, $search, $user)
+    {
+        return $query->where('task', 'like', "%{$search}%")
+            ->where('user_id', $user->id);
+    }
+
     public function getHumanStatusAttribute()
     {
         $statusMapping = TaskStatus::toSelectArray();
@@ -145,10 +152,11 @@ class Todo extends Model
     }
 
 
-    public function scopeByDateRangeAndTaskAndStatus($query, $from, $to, $task, $status)
+    public function scopeByDateRangeAndTaskAndStatusAndUser($query, $from, $to, $search, $status, $user)
     {
         return $query->whereBetween('deadline', [$from, $to])
-            ->where('task', 'like', "%{$task}%")
-            ->where('status', $status);
+            ->where('task', 'like', "%{$search}%")
+            ->where('status', $status)
+            ->where('user_id', $user->id);
     }
 }
