@@ -1,7 +1,7 @@
 import type { TodoStatus } from '@/types';
 import { type PageProps, type TodoType } from '@/types';
 import { router } from '@inertiajs/react';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import Task from './Task';
 
 interface Filter {
@@ -67,7 +67,7 @@ export default function List({ auth, todo }: PageProps<{ todo: TodoType[] }>) {
     });
   };
 
-  const handleDateRangeChange = () => {
+  const handleDateRangeChange = useCallback(() => {
     setFilters(prevFilters => {
       const updatedFilters = prevFilters ? [...prevFilters] : [];
       const dateRangeIndex = updatedFilters.findIndex(
@@ -96,7 +96,7 @@ export default function List({ auth, todo }: PageProps<{ todo: TodoType[] }>) {
 
       return updatedFilters;
     });
-  };
+  }, [from, to]);
 
   const handleFromChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFrom(e.target.value);
@@ -108,8 +108,7 @@ export default function List({ auth, todo }: PageProps<{ todo: TodoType[] }>) {
 
   useEffect(() => {
     handleDateRangeChange();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [from, to]);
+  }, [handleDateRangeChange]);
 
   useEffect(() => {
     router.get(
