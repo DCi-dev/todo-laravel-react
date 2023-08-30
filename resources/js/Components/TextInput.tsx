@@ -1,30 +1,37 @@
-import { forwardRef, useEffect, useImperativeHandle, useRef, InputHTMLAttributes } from 'react';
+import type { InputHTMLAttributes } from 'react';
+import { forwardRef, useEffect, useImperativeHandle, useRef } from 'react';
 
 export default forwardRef(function TextInput(
-    { type = 'text', className = '', isFocused = false, ...props }: InputHTMLAttributes<HTMLInputElement> & { isFocused?: boolean },
-    ref
+  {
+    type = 'text',
+    className = '',
+    isFocused = false,
+    ...props
+  }: InputHTMLAttributes<HTMLInputElement> & { isFocused?: boolean },
+  ref
 ) {
-    const localRef = useRef<HTMLInputElement>(null);
+  const localRef = useRef<HTMLInputElement>(null);
 
-    useImperativeHandle(ref, () => ({
-        focus: () => localRef.current?.focus(),
-    }));
+  useImperativeHandle(ref, () => ({
+    focus: () => localRef.current?.focus(),
+  }));
 
-    useEffect(() => {
-        if (isFocused) {
-            localRef.current?.focus();
-        }
-    }, []);
+  useEffect(() => {
+    if (isFocused) {
+      localRef.current?.focus();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
-    return (
-        <input
-            {...props}
-            type={type}
-            className={
-                'border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm ' +
-                className
-            }
-            ref={localRef}
-        />
-    );
+  return (
+    <input
+      {...props}
+      type={type}
+      className={
+        'border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm ' +
+        className
+      }
+      ref={localRef}
+    />
+  );
 });
