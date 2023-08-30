@@ -151,5 +151,4 @@ class Todo extends Model
             ->where('task', 'like', "%{$task}%")
             ->where('status', $status);
     }
-
 }
