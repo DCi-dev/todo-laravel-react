@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Enums;
 
 
@@ -16,5 +17,13 @@ enum TaskStatus: string
             self::Completed->value => 'Completed',
         ];
     }
-}
 
+    public static function getValues(): array
+    {
+        return [
+            self::Pending->value,
+            self::InProgress->value,
+            self::Completed->value,
+        ];
+    }
+}

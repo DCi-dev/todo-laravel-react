@@ -74,12 +74,14 @@ class TodoController extends Controller
     {
         $user = $request->user();
 
+        $validated = $request->validate(TodoRequest::storeRules());
+
         $todo = Todo::create(
             [
                 'user_id' => $user->id,
-                'task' => $request->task,
-                'status' => $request->status,
-                'deadline' => $request->deadline,
+                'task' => $validated['task'],
+                'status' => $validated['status'],
+                'deadline' => $validated['deadline'],
             ]
         );
 
@@ -99,10 +101,12 @@ class TodoController extends Controller
 
         $todo = Todo::byUser($user)->find($id);
 
+        $validated = $request->validate(TodoRequest::storeRules());
+
         $todo->update([
-            'task' => $request->task,
-            'status' => $request->status,
-            'deadline' => $request->deadline,
+            'task' => $validated['task'],
+            'status' => $validated['status'],
+            'deadline' => $validated['deadline'],
         ]);
 
         return back();

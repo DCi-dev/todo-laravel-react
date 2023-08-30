@@ -2,7 +2,9 @@
 
 namespace App\Http\Requests;
 
+use App\Enums\TaskStatus;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 
 class TodoRequest extends FormRequest
@@ -24,10 +26,9 @@ class TodoRequest extends FormRequest
     public static function storeRules(): array
     {
         return [
-            'user_id' => 'required',
-            'task' => 'required',
-            'status' => 'required',
-            'deadline' => 'required',
+            'task' => ['required', 'string', 'min:2', 'max:255'],
+            'status' => ['required', Rule::in(TaskStatus::getValues())],
+            'deadline' => ['required', 'date']
         ];
     }
 }
